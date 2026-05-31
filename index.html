@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript — Шпаргалка</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-label">Шпаргалка</div>
+  <h1>Java<span>Script</span></h1>
+  <p class="header-sub">От переменных до асинхронности — всё что нужно в одном месте</p>
+</header>
+
+<nav class="toc">
+  <a href="#s1">1. Переменные</a>
+  <a href="#s2">2. Типы данных</a>
+  <a href="#s3">3. Операторы</a>
+  <a href="#s4">4. Условия</a>
+  <a href="#s5">5. Циклы</a>
+  <a href="#s6">6. Функции</a>
+  <a href="#s7">7. Строки</a>
+  <a href="#s8">8. Массивы</a>
+  <a href="#s9">9. Объекты</a>
+  <a href="#s10">10. Деструктуризация</a>
+  <a href="#s11">11. Spread / Rest</a>
+  <a href="#s12">12. Классы</a>
+  <a href="#s13">13. DOM</a>
+  <a href="#s14">14. Промисы и async/await</a>
+  <a href="#s15">15. Продвинутые концепции</a>
+</nav>
+
+
+<!-- 1. ПЕРЕМЕННЫЕ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Переменные</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">const</div>
+      <div class="card-desc">Постоянное значение — не переприсваивается</div>
+      <pre><span class="k">const</span> <span class="v">name</span> <span class="p">=</span> <span class="s">'Аня'</span>;
+<span class="k">const</span> <span class="v">PI</span> <span class="p">=</span> <span class="n">3.14</span>;
+<span class="c">// name = 'Маша'; — ошибка!</span></pre>
+      <div class="note">Используй const по умолчанию. Объекты и массивы через const — их содержимое можно менять.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">let</div>
+      <div class="card-desc">Переменная — можно переприсваивать</div>
+      <pre><span class="k">let</span> <span class="v">count</span> <span class="p">=</span> <span class="n">0</span>;
+<span class="v">count</span> <span class="p">=</span> <span class="n">5</span>;  <span class="c">// ок</span>
+<span class="v">count</span><span class="p">++</span>;   <span class="c">// count = 6</span></pre>
+      <div class="note">Если значение нужно менять — используй let. Видна только внутри своего блока {}.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">var</div>
+      <div class="card-desc">Устаревший способ — почти не используется</div>
+      <pre><span class="k">var</span> <span class="v">x</span> <span class="p">=</span> <span class="n">1</span>;  <span class="c">// избегай</span></pre>
+      <div class="warn">⚠ var не имеет блочной области видимости и «поднимается». Используй const/let.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 2. ТИПЫ ДАННЫХ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Типы данных</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="card">
+    <table>
+      <tr>
+        <th>Тип</th>
+        <th>Описание</th>
+        <th>Пример</th>
+      </tr>
+      <tr><td>number</td><td>Любые числа</td><td>42, 3.14, -7, NaN, Infinity</td></tr>
+      <tr><td>string</td><td>Строки текста</td><td>'привет', "мир", `шаблон`</td></tr>
+      <tr><td>boolean</td><td>Истина или ложь</td><td>true, false</td></tr>
+      <tr><td>null</td><td>Намеренно пустое значение</td><td>null</td></tr>
+      <tr><td>undefined</td><td>Переменная не задана</td><td>undefined</td></tr>
+      <tr><td>object</td><td>Коллекция ключ-значение</td><td>{name: 'Аня'}</td></tr>
+      <tr><td>array</td><td>Список (тоже объект)</td><td>[1, 2, 3]</td></tr>
+      <tr><td>function</td><td>Функция (тоже объект)</td><td>() => {}</td></tr>
+      <tr><td>symbol</td><td>Уникальный идентификатор</td><td>Symbol('id')</td></tr>
+      <tr><td>bigint</td><td>Очень большие числа</td><td>9007199254740991n</td></tr>
+    </table>
+  </div>
+  <br>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">typeof</div>
+      <div class="card-desc">Определить тип значения</div>
+      <pre><span class="k">typeof</span> <span class="n">42</span>          <span class="c">// 'number'</span>
+<span class="k">typeof</span> <span class="s">'hello'</span>      <span class="c">// 'string'</span>
+<span class="k">typeof</span> <span class="t">true</span>         <span class="c">// 'boolean'</span>
+<span class="k">typeof</span> <span class="t">undefined</span>    <span class="c">// 'undefined'</span>
+<span class="k">typeof</span> <span class="t">null</span>         <span class="c">// 'object' ← баг JS!</span>
+<span class="k">typeof</span> []           <span class="c">// 'object'</span>
+<span class="k">typeof</span> {}           <span class="c">// 'object'</span>
+<span class="k">typeof</span> <span class="k">function</span>(){} <span class="c">// 'function'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Преобразование типов</div>
+      <div class="card-desc">Явное и неявное</div>
+      <pre><span class="c">// Явное:</span>
+<span class="f">Number</span>(<span class="s">'42'</span>)     <span class="c">// 42</span>
+<span class="f">String</span>(<span class="n">42</span>)      <span class="c">// '42'</span>
+<span class="f">Boolean</span>(<span class="n">0</span>)     <span class="c">// false</span>
+<span class="f">Boolean</span>(<span class="s">'hi'</span>)   <span class="c">// true</span>
+<span class="f">parseInt</span>(<span class="s">'42px'</span>) <span class="c">// 42</span>
+<span class="f">parseFloat</span>(<span class="s">'3.14'</span>) <span class="c">// 3.14</span>
+
+<span class="c">// Falsy значения:</span>
+<span class="c">// false, 0, '', null, undefined, NaN</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 3. ОПЕРАТОРЫ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Операторы</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Арифметические</div>
+      <pre><span class="n">10</span> <span class="p">+</span> <span class="n">3</span>   <span class="c">// 13</span>
+<span class="n">10</span> <span class="p">-</span> <span class="n">3</span>   <span class="c">// 7</span>
+<span class="n">10</span> <span class="p">*</span> <span class="n">3</span>   <span class="c">// 30</span>
+<span class="n">10</span> <span class="p">/</span> <span class="n">3</span>   <span class="c">// 3.333...</span>
+<span class="n">10</span> <span class="p">%</span> <span class="n">3</span>   <span class="c">// 1 (остаток)</span>
+<span class="n">2</span> <span class="p">**</span> <span class="n">8</span>   <span class="c">// 256 (степень)</span>
+<span class="v">x</span><span class="p">++</span>      <span class="c">// x = x + 1</span>
+<span class="v">x</span><span class="p">--</span>      <span class="c">// x = x - 1</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Сравнение</div>
+      <pre><span class="n">5</span> <span class="p">===</span> <span class="n">5</span>    <span class="c">// true  ← используй это</span>
+<span class="n">5</span> <span class="p">!==</span> <span class="n">6</span>    <span class="c">// true</span>
+<span class="s">'5'</span> <span class="p">==</span> <span class="n">5</span>   <span class="c">// true  ← приводит типы!</span>
+<span class="n">5</span> <span class="p">&gt;</span> <span class="n">3</span>     <span class="c">// true</span>
+<span class="n">5</span> <span class="p">&lt;</span> <span class="n">3</span>     <span class="c">// false</span>
+<span class="n">5</span> <span class="p">&gt;=</span> <span class="n">5</span>    <span class="c">// true</span>
+<span class="n">5</span> <span class="p">&lt;=</span> <span class="n">4</span>    <span class="c">// false</span></pre>
+      <div class="warn">⚠ Всегда используй === вместо ==</div>
+    </div>
+    <div class="card">
+      <div class="card-name">Логические</div>
+      <pre><span class="t">true</span> <span class="p">&&</span> <span class="t">false</span>   <span class="c">// false (И)</span>
+<span class="t">true</span> <span class="p">||</span> <span class="t">false</span>   <span class="c">// true  (ИЛИ)</span>
+<span class="p">!</span><span class="t">true</span>           <span class="c">// false (НЕ)</span>
+
+<span class="c">// Короткое замыкание:</span>
+<span class="v">user</span> <span class="p">&&</span> <span class="v">user</span><span class="p">.</span><span class="v">name</span>  <span class="c">// name только если user есть</span>
+<span class="v">name</span> <span class="p">||</span> <span class="s">'Аноним'</span>  <span class="c">// 'Аноним' если name falsy</span>
+<span class="v">name</span> <span class="p">??</span> <span class="s">'Аноним'</span>  <span class="c">// только если null/undefined</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Присваивание</div>
+      <pre><span class="k">let</span> <span class="v">x</span> <span class="p">=</span> <span class="n">10</span>;
+<span class="v">x</span> <span class="p">+=</span> <span class="n">5</span>;    <span class="c">// x = 15</span>
+<span class="v">x</span> <span class="p">-=</span> <span class="n">3</span>;    <span class="c">// x = 12</span>
+<span class="v">x</span> <span class="p">*=</span> <span class="n">2</span>;    <span class="c">// x = 24</span>
+<span class="v">x</span> <span class="p">/=</span> <span class="n">4</span>;    <span class="c">// x = 6</span>
+<span class="v">x</span> <span class="p">%=</span> <span class="n">4</span>;    <span class="c">// x = 2</span>
+<span class="v">x</span> <span class="p">**=</span> <span class="n">3</span>;   <span class="c">// x = 8</span>
+<span class="v">x</span> <span class="p">??=</span> <span class="n">5</span>;   <span class="c">// если x = null/undefined → 5</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Тернарный оператор</div>
+      <div class="card-desc">Краткий if/else</div>
+      <pre><span class="k">const</span> <span class="v">msg</span> <span class="p">=</span> <span class="v">age</span> <span class="p">&gt;=</span> <span class="n">18</span>
+  <span class="p">?</span> <span class="s">'взрослый'</span>
+  <span class="p">:</span> <span class="s">'ребёнок'</span>;
+
+<span class="c">// Вложенный (лучше избегать):</span>
+<span class="k">const</span> <span class="v">grade</span> <span class="p">=</span> <span class="v">score</span> <span class="p">&gt;=</span> <span class="n">90</span> <span class="p">?</span> <span class="s">'A'</span>
+  <span class="p">:</span> <span class="v">score</span> <span class="p">&gt;=</span> <span class="n">70</span> <span class="p">?</span> <span class="s">'B'</span> <span class="p">:</span> <span class="s">'C'</span>;</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 4. УСЛОВИЯ -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Условия</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">if / else if / else</div>
+      <pre><span class="k">if</span> (<span class="v">score</span> <span class="p">&gt;=</span> <span class="n">90</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Отлично'</span>);
+} <span class="k">else if</span> (<span class="v">score</span> <span class="p">&gt;=</span> <span class="n">70</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Хорошо'</span>);
+} <span class="k">else</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Попробуй ещё'</span>);
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">switch</div>
+      <div class="card-desc">Когда вариантов много</div>
+      <pre><span class="k">switch</span> (<span class="v">day</span>) {
+  <span class="k">case</span> <span class="s">'пн'</span><span class="p">:</span>
+  <span class="k">case</span> <span class="s">'вт'</span><span class="p">:</span>
+    <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Рабочий'</span>);
+    <span class="k">break</span>;
+  <span class="k">case</span> <span class="s">'сб'</span><span class="p">:</span>
+  <span class="k">case</span> <span class="s">'вс'</span><span class="p">:</span>
+    <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Выходной'</span>);
+    <span class="k">break</span>;
+  <span class="k">default</span><span class="p">:</span>
+    <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'Не знаю'</span>);
+}</pre>
+      <div class="note">Не забывай break — иначе выполнятся все следующие case.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 5. ЦИКЛЫ -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Циклы</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">for</div>
+      <div class="card-desc">Классический цикл со счётчиком</div>
+      <pre><span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">0</span>; <span class="v">i</span> <span class="p">&lt;</span> <span class="n">5</span>; <span class="v">i</span><span class="p">++</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">i</span>); <span class="c">// 0 1 2 3 4</span>
+}
+
+<span class="c">// С шагом 2:</span>
+<span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">0</span>; <span class="v">i</span> <span class="p">&lt;</span> <span class="n">10</span>; <span class="v">i</span> <span class="p">+=</span> <span class="n">2</span>) { ... }
+
+<span class="c">// Обратный:</span>
+<span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">4</span>; <span class="v">i</span> <span class="p">&gt;=</span> <span class="n">0</span>; <span class="v">i</span><span class="p">--</span>) { ... }</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">for...of</div>
+      <div class="card-desc">Перебор элементов массива/строки</div>
+      <pre><span class="k">const</span> <span class="v">fruits</span> <span class="p">=</span> [<span class="s">'яблоко'</span>, <span class="s">'груша'</span>];
+
+<span class="k">for</span> (<span class="k">const</span> <span class="v">fruit</span> <span class="k">of</span> <span class="v">fruits</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">fruit</span>);
+}
+
+<span class="c">// С индексом:</span>
+<span class="k">for</span> (<span class="k">const</span> [<span class="v">i</span>, <span class="v">val</span>] <span class="k">of</span> <span class="v">fruits</span><span class="p">.</span><span class="m">entries</span>()) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">i</span>, <span class="v">val</span>);
+}</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">for...in</div>
+      <div class="card-desc">Перебор ключей объекта</div>
+      <pre><span class="k">const</span> <span class="v">user</span> <span class="p">=</span> { <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span>, <span class="v">age</span><span class="p">:</span> <span class="n">25</span> };
+
+<span class="k">for</span> (<span class="k">const</span> <span class="v">key</span> <span class="k">in</span> <span class="v">user</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">key</span>, <span class="v">user</span>[<span class="v">key</span>]);
+  <span class="c">// 'name' 'Аня'</span>
+  <span class="c">// 'age' 25</span>
+}</pre>
+      <div class="warn">⚠ Не использовать for...in для массивов.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">while / do...while</div>
+      <pre><span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">0</span>;
+<span class="k">while</span> (<span class="v">i</span> <span class="p">&lt;</span> <span class="n">3</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">i</span><span class="p">++</span>);
+}
+
+<span class="c">// do...while — выполняется хотя бы раз:</span>
+<span class="k">do</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">i</span>);
+} <span class="k">while</span> (<span class="v">i</span> <span class="p">&lt;</span> <span class="n">0</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">break / continue</div>
+      <pre><span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">0</span>; <span class="v">i</span> <span class="p">&lt;</span> <span class="n">5</span>; <span class="v">i</span><span class="p">++</span>) {
+  <span class="k">if</span> (<span class="v">i</span> <span class="p">===</span> <span class="n">2</span>) <span class="k">continue</span>; <span class="c">// пропустить 2</span>
+  <span class="k">if</span> (<span class="v">i</span> <span class="p">===</span> <span class="n">4</span>) <span class="k">break</span>;    <span class="c">// выйти на 4</span>
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">i</span>); <span class="c">// 0 1 3</span>
+}</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 6. ФУНКЦИИ -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Функции</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Объявление функции</div>
+      <div class="card-desc">Function declaration — поднимается (hoisting)</div>
+      <pre><span class="k">function</span> <span class="f">greet</span>(<span class="v">name</span>) {
+  <span class="k">return</span> <span class="s">`Привет, <span class="p">${</span><span class="v">name</span><span class="p">}</span>!`</span>;
+}
+
+<span class="f">greet</span>(<span class="s">'Аня'</span>); <span class="c">// 'Привет, Аня!'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Стрелочная функция</div>
+      <div class="card-desc">Краткий синтаксис, нет своего this</div>
+      <pre><span class="c">// Полная запись:</span>
+<span class="k">const</span> <span class="v">add</span> <span class="p">=</span> (<span class="v">a</span>, <span class="v">b</span>) <span class="p">=&gt;</span> {
+  <span class="k">return</span> <span class="v">a</span> <span class="p">+</span> <span class="v">b</span>;
+};
+
+<span class="c">// Короткая (один return):</span>
+<span class="k">const</span> <span class="v">add</span> <span class="p">=</span> (<span class="v">a</span>, <span class="v">b</span>) <span class="p">=&gt;</span> <span class="v">a</span> <span class="p">+</span> <span class="v">b</span>;
+
+<span class="c">// Один параметр — скобки не нужны:</span>
+<span class="k">const</span> <span class="v">double</span> <span class="p">=</span> <span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">*</span> <span class="n">2</span>;</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Параметры по умолчанию</div>
+      <pre><span class="k">function</span> <span class="f">greet</span>(<span class="v">name</span> <span class="p">=</span> <span class="s">'Мир'</span>, <span class="v">greeting</span> <span class="p">=</span> <span class="s">'Привет'</span>) {
+  <span class="k">return</span> <span class="s">`<span class="p">${</span><span class="v">greeting</span><span class="p">}</span>, <span class="p">${</span><span class="v">name</span><span class="p">}</span>!`</span>;
+}
+
+<span class="f">greet</span>();          <span class="c">// 'Привет, Мир!'</span>
+<span class="f">greet</span>(<span class="s">'Аня'</span>);     <span class="c">// 'Привет, Аня!'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Callback (функция-аргумент)</div>
+      <div class="card-desc">Передаём функцию в другую функцию</div>
+      <pre><span class="k">function</span> <span class="f">doTwice</span>(<span class="v">fn</span>) {
+  <span class="f">fn</span>();
+  <span class="f">fn</span>();
+}
+
+<span class="f">doTwice</span>(() <span class="p">=&gt;</span> <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'привет'</span>));
+<span class="c">// 'привет'</span>
+<span class="c">// 'привет'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Замыкание (closure)</div>
+      <div class="card-desc">Функция «запоминает» своё окружение</div>
+      <pre><span class="k">function</span> <span class="f">counter</span>() {
+  <span class="k">let</span> <span class="v">count</span> <span class="p">=</span> <span class="n">0</span>;
+  <span class="k">return</span> () <span class="p">=&gt;</span> <span class="p">++</span><span class="v">count</span>;
+}
+
+<span class="k">const</span> <span class="v">c</span> <span class="p">=</span> <span class="f">counter</span>();
+<span class="f">c</span>(); <span class="c">// 1</span>
+<span class="f">c</span>(); <span class="c">// 2</span>
+<span class="f">c</span>(); <span class="c">// 3</span></pre>
+      <div class="note">Внутренняя функция имеет доступ к переменным внешней даже после её завершения.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">IIFE</div>
+      <div class="card-desc">Функция, которая вызывает себя сразу</div>
+      <pre>(<span class="k">function</span>() {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'запустилась сразу'</span>);
+})();
+
+<span class="c">// Или со стрелкой:</span>
+(() <span class="p">=&gt;</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'и эта тоже'</span>);
+})();</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 7. СТРОКИ -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Строки — методы</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="card" style="margin-bottom: 12px;">
+    <table>
+      <tr>
+        <th>Метод</th>
+        <th>Что делает</th>
+        <th>Пример → результат</th>
+      </tr>
+      <tr><td>.length</td><td>Длина строки (свойство!)</td><td>'hello'.length → 5</td></tr>
+      <tr><td>.toUpperCase()</td><td>В верхний регистр</td><td>'hi'.toUpperCase() → 'HI'</td></tr>
+      <tr><td>.toLowerCase()</td><td>В нижний регистр</td><td>'HI'.toLowerCase() → 'hi'</td></tr>
+      <tr><td>.trim()</td><td>Убрать пробелы по краям</td><td>'  hi  '.trim() → 'hi'</td></tr>
+      <tr><td>.includes(str)</td><td>Содержит ли подстроку</td><td>'hello'.includes('ell') → true</td></tr>
+      <tr><td>.startsWith(str)</td><td>Начинается ли с</td><td>'hello'.startsWith('he') → true</td></tr>
+      <tr><td>.endsWith(str)</td><td>Заканчивается ли на</td><td>'hello'.endsWith('lo') → true</td></tr>
+      <tr><td>.indexOf(str)</td><td>Позиция вхождения</td><td>'hello'.indexOf('l') → 2</td></tr>
+      <tr><td>.slice(start, end)</td><td>Вырезать часть строки</td><td>'hello'.slice(1, 3) → 'el'</td></tr>
+      <tr><td>.split(sep)</td><td>Разбить в массив</td><td>'a,b'.split(',') → ['a','b']</td></tr>
+      <tr><td>.replace(old, new)</td><td>Заменить первое</td><td>'aaa'.replace('a','b') → 'baa'</td></tr>
+      <tr><td>.replaceAll(old, new)</td><td>Заменить все</td><td>'aaa'.replaceAll('a','b') → 'bbb'</td></tr>
+      <tr><td>.repeat(n)</td><td>Повторить строку</td><td>'ha'.repeat(3) → 'hahaha'</td></tr>
+      <tr><td>.padStart(n, ch)</td><td>Дополнить слева</td><td>'5'.padStart(3,'0') → '005'</td></tr>
+      <tr><td>.padEnd(n, ch)</td><td>Дополнить справа</td><td>'hi'.padEnd(5,'.') → 'hi...'</td></tr>
+    </table>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Шаблонные строки</div>
+      <pre><span class="k">const</span> <span class="v">name</span> <span class="p">=</span> <span class="s">'Аня'</span>;
+<span class="k">const</span> <span class="v">age</span> <span class="p">=</span> <span class="n">25</span>;
+
+<span class="c">// Вместо конкатенации:</span>
+<span class="s">`Привет, <span class="p">${</span><span class="v">name</span><span class="p">}</span>! Тебе <span class="p">${</span><span class="v">age</span><span class="p">}</span> лет.`</span>
+
+<span class="c">// Выражения:</span>
+<span class="s">`Через 5 лет тебе будет <span class="p">${</span><span class="v">age</span> <span class="p">+</span> <span class="n">5</span><span class="p">}</span>`</span>
+
+<span class="c">// Многострочные:</span>
+<span class="k">const</span> <span class="v">text</span> <span class="p">=</span> <span class="s">`Строка 1
+Строка 2
+Строка 3`</span>;</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 8. МАССИВЫ -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Массивы — методы</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Добавление и удаление</div>
+      <pre><span class="k">const</span> <span class="v">arr</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+
+<span class="v">arr</span><span class="p">.</span><span class="m">push</span>(<span class="n">4</span>);    <span class="c">// [1,2,3,4] — в конец</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">pop</span>();      <span class="c">// [1,2,3] — убрать с конца</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">unshift</span>(<span class="n">0</span>); <span class="c">// [0,1,2,3] — в начало</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">shift</span>();    <span class="c">// [1,2,3] — убрать с начала</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Поиск</div>
+      <pre><span class="k">const</span> <span class="v">arr</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>];
+
+<span class="v">arr</span><span class="p">.</span><span class="m">includes</span>(<span class="n">3</span>)          <span class="c">// true</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">indexOf</span>(<span class="n">3</span>)           <span class="c">// 2</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">find</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">&gt;</span> <span class="n">2</span>)    <span class="c">// 3 (сам элемент)</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">findIndex</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">&gt;</span> <span class="n">2</span>) <span class="c">// 2 (индекс)</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">some</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">&gt;</span> <span class="n">3</span>)    <span class="c">// true (хотя бы один)</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">every</span>(<span class="v">x</span> <span class="p">&gt;</span> <span class="n">0</span>)         <span class="c">// true (все)</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">.map()</div>
+      <div class="card-desc">Создать новый массив, преобразовав каждый элемент</div>
+      <pre><span class="k">const</span> <span class="v">nums</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+
+<span class="v">nums</span><span class="p">.</span><span class="m">map</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">*</span> <span class="n">2</span>);
+<span class="c">// [2, 4, 6]</span>
+
+<span class="v">nums</span><span class="p">.</span><span class="m">map</span>((<span class="v">x</span>, <span class="v">i</span>) <span class="p">=&gt;</span> <span class="s">`<span class="p">${</span><span class="v">i</span><span class="p">}</span>: <span class="p">${</span><span class="v">x</span><span class="p">}</span>`</span>);
+<span class="c">// ['0: 1', '1: 2', '2: 3']</span></pre>
+      <div class="note">Не изменяет исходный массив. Всегда возвращает массив той же длины.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">.filter()</div>
+      <div class="card-desc">Оставить только подходящие элементы</div>
+      <pre><span class="k">const</span> <span class="v">nums</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>, <span class="n">5</span>];
+
+<span class="v">nums</span><span class="p">.</span><span class="m">filter</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">&gt;</span> <span class="n">2</span>);
+<span class="c">// [3, 4, 5]</span>
+
+<span class="v">nums</span><span class="p">.</span><span class="m">filter</span>(<span class="v">x</span> <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">%</span> <span class="n">2</span> <span class="p">===</span> <span class="n">0</span>);
+<span class="c">// [2, 4] — только чётные</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">.reduce()</div>
+      <div class="card-desc">Свернуть массив в одно значение</div>
+      <pre><span class="k">const</span> <span class="v">nums</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>];
+
+<span class="c">// Сумма:</span>
+<span class="v">nums</span><span class="p">.</span><span class="m">reduce</span>((<span class="v">acc</span>, <span class="v">x</span>) <span class="p">=&gt;</span> <span class="v">acc</span> <span class="p">+</span> <span class="v">x</span>, <span class="n">0</span>);
+<span class="c">// 10</span>
+
+<span class="c">// Максимум:</span>
+<span class="v">nums</span><span class="p">.</span><span class="m">reduce</span>((<span class="v">max</span>, <span class="v">x</span>) <span class="p">=&gt;</span> <span class="v">x</span> <span class="p">&gt;</span> <span class="v">max</span> <span class="p">?</span> <span class="v">x</span> <span class="p">:</span> <span class="v">max</span>, <span class="p">-</span><span class="t">Infinity</span>);</pre>
+      <div class="note">Второй аргумент — начальное значение аккумулятора.</div>
+    </div>
+    <div class="card">
+      <div class="card-name">Остальные важные методы</div>
+      <pre><span class="k">const</span> <span class="v">arr</span> <span class="p">=</span> [<span class="n">3</span>, <span class="n">1</span>, <span class="n">4</span>, <span class="n">1</span>];
+
+<span class="v">arr</span><span class="p">.</span><span class="m">slice</span>(<span class="n">1</span>, <span class="n">3</span>)       <span class="c">// [1, 4] — не меняет</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">splice</span>(<span class="n">1</span>, <span class="n">2</span>)      <span class="c">// меняет! удаляет 2 с позиции 1</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">sort</span>((<span class="v">a</span>,<span class="v">b</span>) <span class="p">=&gt;</span> <span class="v">a</span><span class="p">-</span><span class="v">b</span>) <span class="c">// [1,1,3,4] — меняет!</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">reverse</span>()         <span class="c">// меняет!</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">join</span>(<span class="s">', '</span>)       <span class="c">// '3, 1, 4, 1'</span>
+<span class="v">arr</span><span class="p">.</span><span class="m">flat</span>(<span class="t">Infinity</span>)   <span class="c">// разгладить вложенные</span>
+<span class="f">Array</span><span class="p">.</span><span class="m">from</span>(<span class="s">'abc'</span>)    <span class="c">// ['a','b','c']</span>
+<span class="f">Array</span><span class="p">.</span><span class="m">isArray</span>(<span class="v">arr</span>)  <span class="c">// true</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 9. ОБЪЕКТЫ -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Объекты</h2>
+    <span class="section-badge badge-basic">Основы</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Создание и доступ</div>
+      <pre><span class="k">const</span> <span class="v">user</span> <span class="p">=</span> {
+  <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span>,
+  <span class="v">age</span><span class="p">:</span> <span class="n">25</span>,
+  <span class="m">greet</span>() {
+    <span class="k">return</span> <span class="s">`Привет, я <span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="v">name</span><span class="p">}</span>`</span>;
+  }
+};
+
+<span class="v">user</span><span class="p">.</span><span class="v">name</span>         <span class="c">// 'Аня'</span>
+<span class="v">user</span>[<span class="s">'name'</span>]     <span class="c">// 'Аня'</span>
+<span class="v">user</span><span class="p">.</span><span class="m">greet</span>()     <span class="c">// 'Привет, я Аня'</span>
+<span class="v">user</span><span class="p">.</span><span class="v">city</span>        <span class="c">// undefined</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Object методы</div>
+      <pre><span class="k">const</span> <span class="v">obj</span> <span class="p">=</span> { <span class="v">a</span><span class="p">:</span> <span class="n">1</span>, <span class="v">b</span><span class="p">:</span> <span class="n">2</span>, <span class="v">c</span><span class="p">:</span> <span class="n">3</span> };
+
+<span class="f">Object</span><span class="p">.</span><span class="m">keys</span>(<span class="v">obj</span>)    <span class="c">// ['a', 'b', 'c']</span>
+<span class="f">Object</span><span class="p">.</span><span class="m">values</span>(<span class="v">obj</span>) <span class="c">// [1, 2, 3]</span>
+<span class="f">Object</span><span class="p">.</span><span class="m">entries</span>(<span class="v">obj</span>) <span class="c">// [['a',1],['b',2],['c',3]]</span>
+
+<span class="c">// Перебор объекта:</span>
+<span class="f">Object</span><span class="p">.</span><span class="m">entries</span>(<span class="v">obj</span>)<span class="p">.</span><span class="m">forEach</span>(([<span class="v">k</span>, <span class="v">v</span>]) <span class="p">=&gt;</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">k</span>, <span class="v">v</span>);
+});</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Опциональная цепочка и ??</div>
+      <pre><span class="k">const</span> <span class="v">user</span> <span class="p">=</span> { <span class="v">address</span><span class="p">:</span> <span class="t">null</span> };
+
+<span class="c">// Без ?. — ошибка!</span>
+<span class="v">user</span><span class="p">.</span><span class="v">address</span><span class="p">.</span><span class="v">city</span>;  <span class="c">// TypeError</span>
+
+<span class="c">// С ?. — безопасно:</span>
+<span class="v">user</span><span class="p">?.</span><span class="v">address</span><span class="p">?.</span><span class="v">city</span>; <span class="c">// undefined</span>
+
+<span class="c">// Значение по умолчанию:</span>
+<span class="v">user</span><span class="p">?.</span><span class="v">name</span> <span class="p">??</span> <span class="s">'Аноним'</span>; <span class="c">// 'Аноним'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Копирование и слияние</div>
+      <pre><span class="k">const</span> <span class="v">a</span> <span class="p">=</span> { <span class="v">x</span><span class="p">:</span> <span class="n">1</span> };
+<span class="k">const</span> <span class="v">b</span> <span class="p">=</span> { <span class="v">y</span><span class="p">:</span> <span class="n">2</span> };
+
+<span class="c">// Spread (поверхностная копия):</span>
+<span class="k">const</span> <span class="v">copy</span> <span class="p">=</span> { <span class="p">...</span><span class="v">a</span> };
+<span class="k">const</span> <span class="v">merged</span> <span class="p">=</span> { <span class="p">...</span><span class="v">a</span>, <span class="p">...</span><span class="v">b</span> }; <span class="c">// {x:1, y:2}</span>
+
+<span class="c">// Object.assign:</span>
+<span class="f">Object</span><span class="p">.</span><span class="m">assign</span>({}, <span class="v">a</span>, <span class="v">b</span>); <span class="c">// {x:1, y:2}</span>
+
+<span class="c">// Глубокая копия (простых объектов):</span>
+<span class="f">JSON</span><span class="p">.</span><span class="m">parse</span>(<span class="f">JSON</span><span class="p">.</span><span class="m">stringify</span>(<span class="v">obj</span>));</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 10. ДЕСТРУКТУРИЗАЦИЯ -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Деструктуризация</h2>
+    <span class="section-badge badge-mid">Средний</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Деструктуризация массива</div>
+      <pre><span class="k">const</span> [<span class="v">a</span>, <span class="v">b</span>, <span class="v">c</span>] <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+<span class="c">// a=1, b=2, c=3</span>
+
+<span class="c">// Пропустить элемент:</span>
+<span class="k">const</span> [, <span class="v">second</span>] <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>];
+<span class="c">// second = 2</span>
+
+<span class="c">// Со значением по умолчанию:</span>
+<span class="k">const</span> [<span class="v">x</span> <span class="p">=</span> <span class="n">10</span>] <span class="p">=</span> [];
+<span class="c">// x = 10</span>
+
+<span class="c">// Swap переменных:</span>
+[<span class="v">a</span>, <span class="v">b</span>] <span class="p">=</span> [<span class="v">b</span>, <span class="v">a</span>];</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Деструктуризация объекта</div>
+      <pre><span class="k">const</span> <span class="v">user</span> <span class="p">=</span> { <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span>, <span class="v">age</span><span class="p">:</span> <span class="n">25</span> };
+
+<span class="k">const</span> { <span class="v">name</span>, <span class="v">age</span> } <span class="p">=</span> <span class="v">user</span>;
+<span class="c">// name='Аня', age=25</span>
+
+<span class="c">// Переименование:</span>
+<span class="k">const</span> { <span class="v">name</span><span class="p">:</span> <span class="v">n</span> } <span class="p">=</span> <span class="v">user</span>;
+<span class="c">// n='Аня'</span>
+
+<span class="c">// Значение по умолчанию:</span>
+<span class="k">const</span> { <span class="v">city</span> <span class="p">=</span> <span class="s">'Неизвестно'</span> } <span class="p">=</span> <span class="v">user</span>;
+<span class="c">// city='Неизвестно'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">В параметрах функции</div>
+      <pre><span class="c">// Без деструктуризации:</span>
+<span class="k">function</span> <span class="f">greet</span>(<span class="v">user</span>) {
+  <span class="k">return</span> <span class="v">user</span><span class="p">.</span><span class="v">name</span>;
+}
+
+<span class="c">// С деструктуризацией:</span>
+<span class="k">function</span> <span class="f">greet</span>({ <span class="v">name</span>, <span class="v">age</span> <span class="p">=</span> <span class="n">0</span> }) {
+  <span class="k">return</span> <span class="s">`<span class="p">${</span><span class="v">name</span><span class="p">}</span>, <span class="p">${</span><span class="v">age</span><span class="p">}</span> лет`</span>;
+}
+
+<span class="f">greet</span>({ <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span>, <span class="v">age</span><span class="p">:</span> <span class="n">25</span> });</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Вложенная деструктуризация</div>
+      <pre><span class="k">const</span> <span class="v">data</span> <span class="p">=</span> {
+  <span class="v">user</span><span class="p">:</span> {
+    <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span>,
+    <span class="v">address</span><span class="p">:</span> { <span class="v">city</span><span class="p">:</span> <span class="s">'Киев'</span> }
+  }
+};
+
+<span class="k">const</span> { <span class="v">user</span><span class="p">:</span> { <span class="v">name</span>, <span class="v">address</span><span class="p">:</span> { <span class="v">city</span> } } } <span class="p">=</span> <span class="v">data</span>;
+<span class="c">// name='Аня', city='Киев'</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 11. SPREAD / REST -->
+<section class="section" id="s11">
+  <div class="section-header">
+    <span class="section-num">11</span>
+    <h2>Spread / Rest оператор ...</h2>
+    <span class="section-badge badge-mid">Средний</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Spread — развернуть</div>
+      <pre><span class="c">// Массивы:</span>
+<span class="k">const</span> <span class="v">a</span> <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>];
+<span class="k">const</span> <span class="v">b</span> <span class="p">=</span> [<span class="n">3</span>, <span class="n">4</span>];
+<span class="k">const</span> <span class="v">all</span> <span class="p">=</span> [<span class="p">...</span><span class="v">a</span>, <span class="p">...</span><span class="v">b</span>]; <span class="c">// [1,2,3,4]</span>
+<span class="k">const</span> <span class="v">copy</span> <span class="p">=</span> [<span class="p">...</span><span class="v">a</span>];      <span class="c">// [1,2]</span>
+
+<span class="c">// Объекты:</span>
+<span class="k">const</span> <span class="v">user</span> <span class="p">=</span> { <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span> };
+<span class="k">const</span> <span class="v">full</span> <span class="p">=</span> { <span class="p">...</span><span class="v">user</span>, <span class="v">age</span><span class="p">:</span> <span class="n">25</span> };
+
+<span class="c">// В вызове функции:</span>
+<span class="f">Math</span><span class="p">.</span><span class="m">max</span>(<span class="p">...</span>[<span class="n">1</span>, <span class="n">5</span>, <span class="n">3</span>]); <span class="c">// 5</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Rest — собрать остаток</div>
+      <pre><span class="c">// В функции:</span>
+<span class="k">function</span> <span class="f">sum</span>(<span class="p">...</span><span class="v">nums</span>) {
+  <span class="k">return</span> <span class="v">nums</span><span class="p">.</span><span class="m">reduce</span>((<span class="v">a</span>,<span class="v">b</span>) <span class="p">=&gt;</span> <span class="v">a</span><span class="p">+</span><span class="v">b</span>, <span class="n">0</span>);
+}
+<span class="f">sum</span>(<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>); <span class="c">// 10</span>
+
+<span class="c">// В деструктуризации:</span>
+<span class="k">const</span> [<span class="v">first</span>, <span class="p">...</span><span class="v">rest</span>] <span class="p">=</span> [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>, <span class="n">4</span>];
+<span class="c">// first=1, rest=[2,3,4]</span>
+
+<span class="k">const</span> { <span class="v">name</span>, <span class="p">...</span><span class="v">other</span> } <span class="p">=</span> { <span class="v">name</span><span class="p">:</span><span class="s">'Аня'</span>, <span class="v">age</span><span class="p">:</span><span class="n">25</span>, <span class="v">city</span><span class="p">:</span><span class="s">'Киев'</span> };
+<span class="c">// name='Аня', other={age:25, city:'Киев'}</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 12. КЛАССЫ -->
+<section class="section" id="s12">
+  <div class="section-header">
+    <span class="section-num">12</span>
+    <h2>Классы</h2>
+    <span class="section-badge badge-mid">Средний</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Базовый класс</div>
+      <pre><span class="k">class</span> <span class="f">Animal</span> {
+  <span class="c">// Конструктор — вызывается при new</span>
+  <span class="m">constructor</span>(<span class="v">name</span>, <span class="v">sound</span>) {
+    <span class="k">this</span><span class="p">.</span><span class="v">name</span> <span class="p">=</span> <span class="v">name</span>;
+    <span class="k">this</span><span class="p">.</span><span class="v">sound</span> <span class="p">=</span> <span class="v">sound</span>;
+  }
+
+  <span class="c">// Метод:</span>
+  <span class="m">speak</span>() {
+    <span class="k">return</span> <span class="s">`<span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="v">name</span><span class="p">}</span> говорит <span class="p">${</span><span class="k">this</span><span class="p">.</span><span class="v">sound</span><span class="p">}</span>`</span>;
+  }
+}
+
+<span class="k">const</span> <span class="v">cat</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Animal</span>(<span class="s">'Кот'</span>, <span class="s">'мяу'</span>);
+<span class="v">cat</span><span class="p">.</span><span class="m">speak</span>(); <span class="c">// 'Кот говорит мяу'</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Наследование</div>
+      <pre><span class="k">class</span> <span class="f">Dog</span> <span class="k">extends</span> <span class="f">Animal</span> {
+  <span class="m">constructor</span>(<span class="v">name</span>) {
+    <span class="k">super</span>(<span class="v">name</span>, <span class="s">'гав'</span>); <span class="c">// вызов родителя</span>
+    <span class="k">this</span><span class="p">.</span><span class="v">tricks</span> <span class="p">=</span> [];
+  }
+
+  <span class="m">learn</span>(<span class="v">trick</span>) {
+    <span class="k">this</span><span class="p">.</span><span class="v">tricks</span><span class="p">.</span><span class="m">push</span>(<span class="v">trick</span>);
+  }
+}
+
+<span class="k">const</span> <span class="v">dog</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Dog</span>(<span class="s">'Рекс'</span>);
+<span class="v">dog</span><span class="p">.</span><span class="m">speak</span>();    <span class="c">// 'Рекс говорит гав'</span>
+<span class="v">dog</span><span class="p">.</span><span class="m">learn</span>(<span class="s">'сидеть'</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Getter, Setter, Static</div>
+      <pre><span class="k">class</span> <span class="f">Circle</span> {
+  <span class="k">constructor</span>(<span class="v">r</span>) { <span class="k">this</span><span class="p">.</span><span class="v">r</span> <span class="p">=</span> <span class="v">r</span>; }
+
+  <span class="c">// Getter — как свойство:</span>
+  <span class="k">get</span> <span class="m">area</span>() {
+    <span class="k">return</span> <span class="f">Math</span><span class="p">.</span><span class="v">PI</span> <span class="p">*</span> <span class="k">this</span><span class="p">.</span><span class="v">r</span> <span class="p">**</span> <span class="n">2</span>;
+  }
+
+  <span class="c">// Статический метод:</span>
+  <span class="k">static</span> <span class="m">compare</span>(<span class="v">c1</span>, <span class="v">c2</span>) {
+    <span class="k">return</span> <span class="v">c1</span><span class="p">.</span><span class="v">r</span> <span class="p">-</span> <span class="v">c2</span><span class="p">.</span><span class="v">r</span>;
+  }
+}
+
+<span class="k">const</span> <span class="v">c</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Circle</span>(<span class="n">5</span>);
+<span class="v">c</span><span class="p">.</span><span class="v">area</span>; <span class="c">// ~78.5 (без скобок!)</span>
+<span class="f">Circle</span><span class="p">.</span><span class="m">compare</span>(<span class="v">c1</span>, <span class="v">c2</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Приватные поля (#)</div>
+      <pre><span class="k">class</span> <span class="f">BankAccount</span> {
+  <span class="p">#</span><span class="v">balance</span> <span class="p">=</span> <span class="n">0</span>; <span class="c">// приватное поле</span>
+
+  <span class="m">deposit</span>(<span class="v">amount</span>) {
+    <span class="k">if</span> (<span class="v">amount</span> <span class="p">&gt;</span> <span class="n">0</span>) <span class="k">this</span><span class="p">.</span><span class="p">#</span><span class="v">balance</span> <span class="p">+=</span> <span class="v">amount</span>;
+  }
+
+  <span class="k">get</span> <span class="m">balance</span>() { <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="p">#</span><span class="v">balance</span>; }
+}
+
+<span class="k">const</span> <span class="v">acc</span> <span class="p">=</span> <span class="k">new</span> <span class="f">BankAccount</span>();
+<span class="v">acc</span><span class="p">.</span><span class="m">deposit</span>(<span class="n">100</span>);
+<span class="v">acc</span><span class="p">.</span><span class="p">#</span><span class="v">balance</span>; <span class="c">// SyntaxError!</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 13. DOM -->
+<section class="section" id="s13">
+  <div class="section-header">
+    <span class="section-num">13</span>
+    <h2>DOM — работа с браузером</h2>
+    <span class="section-badge badge-mid">Средний</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Поиск элементов</div>
+      <pre><span class="c">// Один элемент:</span>
+<span class="f">document</span><span class="p">.</span><span class="m">getElementById</span>(<span class="s">'app'</span>)
+<span class="f">document</span><span class="p">.</span><span class="m">querySelector</span>(<span class="s">'.btn'</span>)
+<span class="f">document</span><span class="p">.</span><span class="m">querySelector</span>(<span class="s">'#id'</span>)
+<span class="f">document</span><span class="p">.</span><span class="m">querySelector</span>(<span class="s">'p:first-child'</span>)
+
+<span class="c">// Несколько (NodeList):</span>
+<span class="f">document</span><span class="p">.</span><span class="m">querySelectorAll</span>(<span class="s">'.card'</span>)
+<span class="f">document</span><span class="p">.</span><span class="m">getElementsByClassName</span>(<span class="s">'btn'</span>)
+<span class="f">document</span><span class="p">.</span><span class="m">getElementsByTagName</span>(<span class="s">'p'</span>)</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Изменение содержимого</div>
+      <pre><span class="k">const</span> <span class="v">el</span> <span class="p">=</span> <span class="f">document</span><span class="p">.</span><span class="m">querySelector</span>(<span class="s">'#app'</span>);
+
+<span class="v">el</span><span class="p">.</span><span class="v">textContent</span> <span class="p">=</span> <span class="s">'Привет'</span>;    <span class="c">// безопасно</span>
+<span class="v">el</span><span class="p">.</span><span class="v">innerHTML</span> <span class="p">=</span> <span class="s">'&lt;b&gt;Привет&lt;/b&gt;'</span>; <span class="c">// HTML</span>
+<span class="v">el</span><span class="p">.</span><span class="v">style</span><span class="p">.</span><span class="v">color</span> <span class="p">=</span> <span class="s">'red'</span>;
+<span class="v">el</span><span class="p">.</span><span class="v">style</span><span class="p">.</span><span class="v">fontSize</span> <span class="p">=</span> <span class="s">'18px'</span>; <span class="c">// camelCase!</span>
+<span class="v">el</span><span class="p">.</span><span class="m">setAttribute</span>(<span class="s">'data-id'</span>, <span class="s">'42'</span>);
+<span class="v">el</span><span class="p">.</span><span class="m">getAttribute</span>(<span class="s">'href'</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Классы</div>
+      <pre><span class="v">el</span><span class="p">.</span><span class="v">classList</span><span class="p">.</span><span class="m">add</span>(<span class="s">'active'</span>);
+<span class="v">el</span><span class="p">.</span><span class="v">classList</span><span class="p">.</span><span class="m">remove</span>(<span class="s">'hidden'</span>);
+<span class="v">el</span><span class="p">.</span><span class="v">classList</span><span class="p">.</span><span class="m">toggle</span>(<span class="s">'open'</span>);
+<span class="v">el</span><span class="p">.</span><span class="v">classList</span><span class="p">.</span><span class="m">contains</span>(<span class="s">'active'</span>); <span class="c">// true/false</span>
+<span class="v">el</span><span class="p">.</span><span class="v">classList</span><span class="p">.</span><span class="m">replace</span>(<span class="s">'old'</span>, <span class="s">'new'</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Создание и удаление</div>
+      <pre><span class="k">const</span> <span class="v">div</span> <span class="p">=</span> <span class="f">document</span><span class="p">.</span><span class="m">createElement</span>(<span class="s">'div'</span>);
+<span class="v">div</span><span class="p">.</span><span class="v">textContent</span> <span class="p">=</span> <span class="s">'Новый блок'</span>;
+<span class="v">div</span><span class="p">.</span><span class="v">className</span> <span class="p">=</span> <span class="s">'card'</span>;
+
+<span class="f">document</span><span class="p">.</span><span class="v">body</span><span class="p">.</span><span class="m">append</span>(<span class="v">div</span>);    <span class="c">// в конец</span>
+<span class="f">document</span><span class="p">.</span><span class="v">body</span><span class="p">.</span><span class="m">prepend</span>(<span class="v">div</span>);   <span class="c">// в начало</span>
+<span class="v">el</span><span class="p">.</span><span class="m">before</span>(<span class="v">div</span>);  <span class="c">// перед el</span>
+<span class="v">el</span><span class="p">.</span><span class="m">after</span>(<span class="v">div</span>);   <span class="c">// после el</span>
+<span class="v">el</span><span class="p">.</span><span class="m">remove</span>();     <span class="c">// удалить</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">События</div>
+      <pre><span class="k">const</span> <span class="v">btn</span> <span class="p">=</span> <span class="f">document</span><span class="p">.</span><span class="m">querySelector</span>(<span class="s">'#btn'</span>);
+
+<span class="v">btn</span><span class="p">.</span><span class="m">addEventListener</span>(<span class="s">'click'</span>, (<span class="v">e</span>) <span class="p">=&gt;</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">e</span><span class="p">.</span><span class="v">target</span>); <span class="c">// элемент</span>
+  <span class="v">e</span><span class="p">.</span><span class="m">preventDefault</span>(); <span class="c">// отменить default</span>
+  <span class="v">e</span><span class="p">.</span><span class="m">stopPropagation</span>(); <span class="c">// не всплывать</span>
+});
+
+<span class="c">// Популярные события:</span>
+<span class="c">// click, dblclick, mouseover, mouseout</span>
+<span class="c">// keydown, keyup, keypress</span>
+<span class="c">// input, change, submit, focus, blur</span>
+<span class="c">// load, DOMContentLoaded, resize, scroll</span></pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 14. ПРОМИСЫ -->
+<section class="section" id="s14">
+  <div class="section-header">
+    <span class="section-num">14</span>
+    <h2>Промисы и async/await</h2>
+    <span class="section-badge badge-advanced">Продвинутый</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Promise</div>
+      <div class="card-desc">Обещание будущего результата</div>
+      <pre><span class="k">const</span> <span class="v">p</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Promise</span>((<span class="v">resolve</span>, <span class="v">reject</span>) <span class="p">=&gt;</span> {
+  <span class="k">if</span> (<span class="v">ok</span>) <span class="f">resolve</span>(<span class="s">'данные'</span>);
+  <span class="k">else</span>    <span class="f">reject</span>(<span class="k">new</span> <span class="f">Error</span>(<span class="s">'ошибка'</span>));
+});
+
+<span class="v">p</span>
+  <span class="p">.</span><span class="m">then</span>(<span class="v">data</span> <span class="p">=&gt;</span> <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">data</span>))
+  <span class="p">.</span><span class="m">catch</span>(<span class="v">err</span> <span class="p">=&gt;</span> <span class="f">console</span><span class="p">.</span><span class="m">error</span>(<span class="v">err</span>))
+  <span class="p">.</span><span class="m">finally</span>(() <span class="p">=&gt;</span> <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'конец'</span>));</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">async / await</div>
+      <div class="card-desc">Синтаксический сахар над промисами</div>
+      <pre><span class="k">async function</span> <span class="f">getData</span>() {
+  <span class="k">try</span> {
+    <span class="k">const</span> <span class="v">res</span> <span class="p">=</span> <span class="k">await</span> <span class="f">fetch</span>(<span class="s">'https://api.example.com'</span>);
+    <span class="k">const</span> <span class="v">data</span> <span class="p">=</span> <span class="k">await</span> <span class="v">res</span><span class="p">.</span><span class="m">json</span>();
+    <span class="k">return</span> <span class="v">data</span>;
+  } <span class="k">catch</span> (<span class="v">err</span>) {
+    <span class="f">console</span><span class="p">.</span><span class="m">error</span>(<span class="s">'Ошибка:'</span>, <span class="v">err</span>);
+  }
+}
+
+<span class="f">getData</span>()<span class="p">.</span><span class="m">then</span>(<span class="v">d</span> <span class="p">=&gt;</span> <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">d</span>));</pre>
+      <div class="warn">⚠ Всегда оборачивай await в try/catch</div>
+    </div>
+    <div class="card">
+      <div class="card-name">Promise.all / allSettled</div>
+      <pre><span class="c">// Все или никто:</span>
+<span class="k">const</span> [<span class="v">u</span>, <span class="v">p</span>] <span class="p">=</span> <span class="k">await</span> <span class="f">Promise</span><span class="p">.</span><span class="m">all</span>([
+  <span class="f">fetchUser</span>(),
+  <span class="f">fetchPosts</span>()
+]);
+
+<span class="c">// Дождаться всех, даже если ошибки:</span>
+<span class="k">const</span> <span class="v">results</span> <span class="p">=</span> <span class="k">await</span> <span class="f">Promise</span><span class="p">.</span><span class="m">allSettled</span>([...]);
+<span class="v">results</span><span class="p">.</span><span class="m">forEach</span>((<span class="v">r</span>) <span class="p">=&gt;</span> {
+  <span class="k">if</span> (<span class="v">r</span><span class="p">.</span><span class="v">status</span> <span class="p">===</span> <span class="s">'fulfilled'</span>) ...
+});</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">fetch API</div>
+      <pre><span class="c">// GET:</span>
+<span class="k">const</span> <span class="v">res</span> <span class="p">=</span> <span class="k">await</span> <span class="f">fetch</span>(<span class="v">url</span>);
+<span class="k">const</span> <span class="v">data</span> <span class="p">=</span> <span class="k">await</span> <span class="v">res</span><span class="p">.</span><span class="m">json</span>();
+
+<span class="c">// POST:</span>
+<span class="k">await</span> <span class="f">fetch</span>(<span class="v">url</span>, {
+  <span class="v">method</span><span class="p">:</span> <span class="s">'POST'</span>,
+  <span class="v">headers</span><span class="p">:</span> { <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span> },
+  <span class="v">body</span><span class="p">:</span> <span class="f">JSON</span><span class="p">.</span><span class="m">stringify</span>({ <span class="v">name</span><span class="p">:</span> <span class="s">'Аня'</span> })
+});
+
+<span class="c">// Проверить статус:</span>
+<span class="k">if</span> (<span class="p">!</span><span class="v">res</span><span class="p">.</span><span class="v">ok</span>) <span class="k">throw</span> <span class="k">new</span> <span class="f">Error</span>(<span class="v">res</span><span class="p">.</span><span class="v">status</span>);</pre>
+    </div>
+  </div>
+</section>
+
+
+<!-- 15. ПРОДВИНУТЫЕ КОНЦЕПЦИИ -->
+<section class="section" id="s15">
+  <div class="section-header">
+    <span class="section-num">15</span>
+    <h2>Продвинутые концепции</h2>
+    <span class="section-badge badge-advanced">Продвинутый</span>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-name">Map и Set</div>
+      <pre><span class="c">// Map — словарь, ключи любого типа:</span>
+<span class="k">const</span> <span class="v">map</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Map</span>();
+<span class="v">map</span><span class="p">.</span><span class="m">set</span>(<span class="s">'key'</span>, <span class="n">42</span>);
+<span class="v">map</span><span class="p">.</span><span class="m">get</span>(<span class="s">'key'</span>);   <span class="c">// 42</span>
+<span class="v">map</span><span class="p">.</span><span class="m">has</span>(<span class="s">'key'</span>);   <span class="c">// true</span>
+<span class="v">map</span><span class="p">.</span><span class="m">delete</span>(<span class="s">'key'</span>);
+<span class="v">map</span><span class="p">.</span><span class="v">size</span>;          <span class="c">// 0</span>
+
+<span class="c">// Set — уникальные значения:</span>
+<span class="k">const</span> <span class="v">set</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Set</span>([<span class="n">1</span>, <span class="n">2</span>, <span class="n">2</span>, <span class="n">3</span>]);
+<span class="c">// Set(3) {1, 2, 3}</span>
+<span class="k">const</span> <span class="v">unique</span> <span class="p">=</span> [<span class="p">...</span><span class="k">new</span> <span class="f">Set</span>(<span class="v">arr</span>)]; <span class="c">// убрать дубли</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Генераторы</div>
+      <pre><span class="k">function*</span> <span class="f">range</span>(<span class="v">start</span>, <span class="v">end</span>) {
+  <span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="v">start</span>; <span class="v">i</span> <span class="p">&lt;=</span> <span class="v">end</span>; <span class="v">i</span><span class="p">++</span>) {
+    <span class="k">yield</span> <span class="v">i</span>;
+  }
+}
+
+<span class="k">for</span> (<span class="k">const</span> <span class="v">n</span> <span class="k">of</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">5</span>)) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">n</span>); <span class="c">// 1 2 3 4 5</span>
+}
+
+<span class="k">const</span> <span class="v">gen</span> <span class="p">=</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">3</span>);
+<span class="v">gen</span><span class="p">.</span><span class="m">next</span>(); <span class="c">// {value: 1, done: false}</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Symbol и итераторы</div>
+      <pre><span class="c">// Symbol — уникальный ключ:</span>
+<span class="k">const</span> <span class="v">id</span> <span class="p">=</span> <span class="f">Symbol</span>(<span class="s">'id'</span>);
+<span class="k">const</span> <span class="v">obj</span> <span class="p">=</span> { [<span class="v">id</span>]<span class="p">:</span> <span class="n">42</span> };
+<span class="v">obj</span>[<span class="v">id</span>]; <span class="c">// 42</span>
+
+<span class="c">// Кастомный итератор:</span>
+<span class="k">const</span> <span class="v">range</span> <span class="p">=</span> {
+  [<span class="f">Symbol</span><span class="p">.</span><span class="v">iterator</span>]() {
+    <span class="k">let</span> <span class="v">i</span> <span class="p">=</span> <span class="n">0</span>;
+    <span class="k">return</span> { <span class="m">next</span>: () <span class="p">=&gt;</span>
+      <span class="v">i</span> <span class="p">&lt;</span> <span class="n">3</span>
+        <span class="p">?</span> { <span class="v">value</span><span class="p">:</span> <span class="v">i</span><span class="p">++</span>, <span class="v">done</span><span class="p">:</span> <span class="t">false</span> }
+        <span class="p">:</span> { <span class="v">done</span><span class="p">:</span> <span class="t">true</span> }
+    };
+  }
+};</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Proxy и Reflect</div>
+      <pre><span class="k">const</span> <span class="v">handler</span> <span class="p">=</span> {
+  <span class="m">get</span>(<span class="v">target</span>, <span class="v">key</span>) {
+    <span class="k">return</span> <span class="v">key</span> <span class="k">in</span> <span class="v">target</span>
+      <span class="p">?</span> <span class="v">target</span>[<span class="v">key</span>]
+      <span class="p">:</span> <span class="s">`Нет ключа "<span class="p">${</span><span class="v">key</span><span class="p">}</span>"`</span>;
+  },
+  <span class="m">set</span>(<span class="v">target</span>, <span class="v">key</span>, <span class="v">val</span>) {
+    <span class="k">if</span> (<span class="k">typeof</span> <span class="v">val</span> <span class="p">!==</span> <span class="s">'number'</span>) <span class="k">throw</span> <span class="k">new</span> <span class="f">Error</span>(<span class="s">'Только числа!'</span>);
+    <span class="v">target</span>[<span class="v">key</span>] <span class="p">=</span> <span class="v">val</span>; <span class="k">return</span> <span class="t">true</span>;
+  }
+};
+<span class="k">const</span> <span class="v">p</span> <span class="p">=</span> <span class="k">new</span> <span class="f">Proxy</span>({}, <span class="v">handler</span>);</pre>
+    </div>
+    <div class="card">
+      <div class="card-name">WeakMap / WeakRef</div>
+      <pre><span class="c">// WeakMap — не мешает сборке мусора:</span>
+<span class="k">const</span> <span class="v">wm</span> <span class="p">=</span> <span class="k">new</span> <span class="f">WeakMap</span>();
+<span class="k">let</span> <span class="v">obj</span> <span class="p">=</span> {};
+<span class="v">wm</span><span class="p">.</span><span class="m">set</span>(<span class="v">obj</span>, <span class="s">'данные'</span>);
+<span class="v">obj</span> <span class="p">=</span> <span class="t">null</span>; <span class="c">// 'данные' удалятся</span>
+
+<span class="c">// WeakRef — слабая ссылка:</span>
+<span class="k">const</span> <span class="v">ref</span> <span class="p">=</span> <span class="k">new</span> <span class="f">WeakRef</span>(<span class="v">obj</span>);
+<span class="v">ref</span><span class="p">.</span><span class="m">deref</span>(); <span class="c">// объект или undefined</span></pre>
+    </div>
+    <div class="card">
+      <div class="card-name">Error — обработка ошибок</div>
+      <pre><span class="k">try</span> {
+  <span class="k">throw</span> <span class="k">new</span> <span class="f">Error</span>(<span class="s">'что-то пошло не так'</span>);
+} <span class="k">catch</span> (<span class="v">err</span>) {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">err</span><span class="p">.</span><span class="v">message</span>); <span class="c">// сообщение</span>
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">err</span><span class="p">.</span><span class="v">name</span>);    <span class="c">// 'Error'</span>
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="v">err</span><span class="p">.</span><span class="v">stack</span>);   <span class="c">// стектрейс</span>
+} <span class="k">finally</span> {
+  <span class="f">console</span><span class="p">.</span><span class="m">log</span>(<span class="s">'выполнится всегда'</span>);
+}
+
+<span class="c">// Свой тип ошибки:</span>
+<span class="k">class</span> <span class="f">ValidationError</span> <span class="k">extends</span> <span class="f">Error</span> {
+  <span class="m">constructor</span>(<span class="v">msg</span>) { <span class="k">super</span>(<span class="v">msg</span>); <span class="k">this</span><span class="p">.</span><span class="v">name</span> <span class="p">=</span> <span class="s">'ValidationError'</span>; }
+}</pre>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  JavaScript Cheatsheet · от азов до продвинутых тем
+</footer>
+
+</body>
+</html>
